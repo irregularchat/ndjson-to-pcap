@@ -2,11 +2,22 @@
 
 import json
 import argparse
+import os
 from pcapng import savefile
 import pcapng
 
 def convert_ndjson_to_pcap(ndjson_file, pcap_file):
     try:
+        # Check if the input file is NDJSON
+        if not ndjson_file.endswith('.ndjson'):
+            raise ValueError("Input file is not an NDJSON file.")
+
+        # Determine the output file name
+        if not pcap_file:
+            pcap_file = os.path.splitext(ndjson_file)[0] + '.pcap'
+        elif not pcap_file.endswith('.pcap'):
+            pcap_file += '.pcap'
+
         # Open NDJSON file
         with open(ndjson_file, 'r') as ndjson:
             # Open PCAP file for writing
@@ -49,6 +60,8 @@ def convert_ndjson_to_pcap(ndjson_file, pcap_file):
 
         print(f"Conversion completed. PCAP file saved as {pcap_file}")
 
+    except ValueError as ve:
+        print(ve)
     except FileNotFoundError:
         print(f"NDJSON file {ndjson_file} not found.")
     except IOError as e:
@@ -62,7 +75,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    if not args.ndjson_file or not args.pcap_file:
+    if not args.ndjson_file:
         parser.print_help()
     else:
         # Convert NDJSON to PCAP
