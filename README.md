@@ -27,10 +27,10 @@ If you do not provide the necessary arguments, the script will display usage ins
 - Python 3.x
 - pcapng module
 
-You can install the required module using pip:
-
+You can install the required module using pip requirements file:
+    
 ```bash
-pip install pcapng
+pip install -r requirements.txt
 ```
 
 ## Troubleshooting
