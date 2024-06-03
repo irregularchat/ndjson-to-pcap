@@ -1,6 +1,7 @@
 # ndjson-to-pcap.py
 
 import json
+import argparse
 from pcapng import savefile
 import pcapng
 
@@ -54,14 +55,15 @@ def convert_ndjson_to_pcap(ndjson_file, pcap_file):
         print(f"Error reading/writing file: {e}")
 
 if __name__ == "__main__":
-    import argparse
-
     # Argument parser for command line arguments
     parser = argparse.ArgumentParser(description="Convert NDJSON to PCAP")
-    parser.add_argument("ndjson_file", help="Path to the NDJSON file")
-    parser.add_argument("pcap_file", help="Path to the output PCAP file")
+    parser.add_argument("ndjson_file", nargs='?', help="Path to the NDJSON file")
+    parser.add_argument("pcap_file", nargs='?', help="Path to the output PCAP file")
 
     args = parser.parse_args()
 
-    # Convert NDJSON to PCAP
-    convert_ndjson_to_pcap(args.ndjson_file, args.pcap_file)
+    if not args.ndjson_file or not args.pcap_file:
+        parser.print_help()
+    else:
+        # Convert NDJSON to PCAP
+        convert_ndjson_to_pcap(args.ndjson_file, args.pcap_file)
